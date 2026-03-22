@@ -49,25 +49,114 @@
 #offlineBanner{position:fixed;top:0;left:0;width:100%;z-index:9999;background:#b45309;color:#fff;font-family:var(--game-body,'Nunito',sans-serif);font-size:13px;font-weight:700;text-align:center;padding:8px 16px;letter-spacing:.5px;opacity:0;pointer-events:none;transition:opacity 0.6s ease;}
 
 *{box-sizing:border-box;margin:0;padding:0;}
-html,body{width:100%;height:100%;background:#111827;overflow:hidden;}
+html,body{width:100%;height:100%;margin:0;padding:0;overflow:hidden;}
 
-/* ── PHONE FRAME (desktop) ── */
+/* ── DEVICE LAYOUT SYSTEM ── */
+
+/* === MOBILE (phones) — full screen, no frame === */
+body.device-mobile .phone-wrap{
+  display:flex;padding:0;min-height:100dvh;min-height:100vh;
+  align-items:stretch;background:#0f0c29;
+}
+body.device-mobile .phone{
+  width:100%;height:100dvh;height:100vh;
+  border-radius:0;border:none;box-shadow:none;
+  background:#0f0c29;
+}
+body.device-mobile .notch,
+body.device-mobile .home-bar{display:none;}
+
+/* === TABLET — centered card, no fake phone frame === */
+body.device-tablet .phone-wrap{
+  display:flex;justify-content:center;align-items:flex-start;
+  padding:24px 16px;min-height:100vh;
+  background:linear-gradient(135deg,#0a0618 0%,#1a0840 50%,#0a1628 100%);
+}
+body.device-tablet .phone{
+  width:520px;
+  height:calc(100vh - 48px);
+  max-height:900px;
+  border-radius:28px;
+  border:2px solid rgba(167,139,250,.25);
+  box-shadow:0 0 60px rgba(124,58,237,.3),0 30px 80px rgba(0,0,0,.6);
+  background:#0f0c29;
+}
+body.device-tablet .notch,
+body.device-tablet .home-bar{display:none;}
+body.device-tablet .content{padding:18px 20px 100px;}
+
+/* === DESKTOP — wide panel with decorative sidebar === */
+body.device-desktop .phone-wrap{
+  display:flex;justify-content:center;align-items:center;
+  min-height:100vh;padding:0;gap:0;
+  background:linear-gradient(135deg,#060412 0%,#130828 40%,#061018 100%);
+}
+body.device-desktop .phone{
+  width:420px;
+  height:min(820px, 92vh);
+  border-radius:32px;
+  border:2px solid rgba(167,139,250,.2);
+  box-shadow:0 0 80px rgba(124,58,237,.25),0 40px 100px rgba(0,0,0,.7),
+             inset 0 0 0 1px rgba(255,255,255,.04);
+  background:#0f0c29;
+  flex-shrink:0;
+}
+body.device-desktop .notch,
+body.device-desktop .home-bar{display:none;}
+body.device-desktop .content{padding:16px 18px 90px;}
+
+/* Desktop info panel next to the game */
+.desktop-panel{
+  display:none;
+  flex-direction:column;
+  justify-content:center;
+  padding:40px 48px;
+  max-width:340px;
+  color:white;
+}
+body.device-desktop .desktop-panel{display:flex;}
+.desktop-panel-title{
+  font-family:var(--game-display,sans-serif);
+  font-size:32px;color:#FFD700;
+  text-shadow:0 0 30px #FFD70044;
+  margin-bottom:8px;line-height:1.2;
+}
+.desktop-panel-sub{
+  font-family:var(--game-body,sans-serif);
+  font-size:14px;color:#a78bfa;
+  letter-spacing:1px;text-transform:uppercase;
+  margin-bottom:28px;
+}
+.desktop-panel-feat{
+  display:flex;flex-direction:column;gap:14px;margin-bottom:32px;
+}
+.desktop-feat-item{
+  display:flex;align-items:center;gap:12px;
+  font-family:var(--game-body,sans-serif);font-size:14px;color:#C8B6FF;
+}
+.desktop-feat-icon{
+  width:36px;height:36px;border-radius:10px;
+  background:rgba(167,139,250,.15);border:1px solid rgba(167,139,250,.3);
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+  flex-shrink:0;
+}
+.desktop-device-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  border-radius:20px;padding:6px 14px;
+  font-family:var(--game-body,sans-serif);font-size:12px;color:#6b7280;
+}
+
+/* Fallback: if no device class yet, use mobile-safe defaults */
 .phone-wrap{display:flex;justify-content:center;align-items:flex-start;padding:24px 16px;min-height:100vh;background:#111827;}
 .phone{width:375px;height:780px;background:#0f0c29;border-radius:44px;border:10px solid #1f2937;box-shadow:0 0 0 2px #374151,0 30px 80px rgba(0,0,0,.8),inset 0 0 0 1px rgba(255,255,255,.05);overflow:hidden;position:relative;display:flex;flex-direction:column;}
 .notch{width:120px;height:28px;background:#1f2937;border-radius:0 0 18px 18px;margin:0 auto;z-index:10;flex-shrink:0;}
-
-/* ── FULL SCREEN on real phones ── */
-@media(max-width:430px){
-  body{overflow:hidden;}
-  .phone-wrap{padding:0;min-height:100dvh;align-items:stretch;}
-  .phone{width:100%;height:100dvh;border-radius:0;border:none;box-shadow:none;}
-  .notch,.home-bar{display:none;}
-}
+.home-bar{height:20px;background:#1f2937;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.home-indicator{width:100px;height:4px;background:#4b5563;border-radius:4px;}
 
 .screen{flex:1;overflow-y:auto;overflow-x:hidden;background:linear-gradient(160deg,#1a1040 0%,#2d1b69 55%,#0f4c3a 100%);position:relative;scrollbar-width:none;}
 .screen::-webkit-scrollbar{display:none;}
-.home-bar{height:20px;background:#1f2937;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.home-indicator{width:100px;height:4px;background:#4b5563;border-radius:4px;}
+
 .stars-bg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;}
 .star{position:absolute;background:white;border-radius:50%;animation:twinkle 2s infinite alternate;}
 
@@ -99,8 +188,7 @@ html,body{width:100%;height:100%;background:#111827;overflow:hidden;}
 .icon-btn:active{transform:scale(.92) translateY(1px);}
 .back-btn{background:#7c3aed;box-shadow:0 4px 0 #4c1d95,0 0 14px #7c3aedaa;animation:glowPulse 2.5s ease-in-out infinite;}
 .save-btn{background:#d97706;box-shadow:0 4px 0 #92400e,0 0 14px #f59e0baa;animation:glowPulse 2.5s ease-in-out infinite;}
-.music-btn{position:absolute;bottom:28px;right:16px;z-index:300;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:transform .15s;box-shadow:0 0 12px rgba(168,139,250,.5);}
-.music-btn:active{transform:scale(.88);}
+
 .diff-btn{width:100%;font-family:var(--game-display,'Fredoka One',cursive);font-size:var(--fs-diff-btn);border:none;border-radius:16px;padding:14px 16px;margin-bottom:10px;cursor:pointer;color:#fff;display:flex;align-items:center;justify-content:center;gap:10px;text-shadow:0 1px 3px rgba(0,0,0,.5);transition:transform .15s;position:relative;overflow:hidden;}
 .diff-btn:active{transform:translateY(2px);}
 .btn-easy{background:#16a34a;box-shadow:0 4px 0 #14532d,0 0 16px #22c55eaa;animation:glowPulse 2s ease-in-out infinite;}
@@ -229,7 +317,17 @@ html,body{width:100%;height:100%;background:#111827;overflow:hidden;}
 <body>
 <div id="offlineBanner">⚠️ You are offline — game still works! Progress is saved locally.</div>
 
-<div class="phone-wrap"><div class="phone">
+<div class="phone-wrap"><div class="desktop-panel" id="desktopPanel">
+  <div class="desktop-panel-title">✨ Magic<br>Guild Trial</div>
+  <div class="desktop-panel-sub">Reading Comprehension Quest</div>
+  <div class="desktop-panel-feat">
+    <div class="desktop-feat-item"><div class="desktop-feat-icon">📖</div><span>Read passages and answer comprehension questions</span></div>
+    <div class="desktop-feat-item"><div class="desktop-feat-icon">⚔️</div><span>Fight the Archmage boss after each round</span></div>
+    <div class="desktop-feat-item"><div class="desktop-feat-icon">📅</div><span>Daily challenge — new questions every day</span></div>
+    <div class="desktop-feat-item"><div class="desktop-feat-icon">⚡</div><span>Earn XP, level up and unlock harder difficulties</span></div>
+  </div>
+  <div class="desktop-device-badge" id="deviceBadge">🖥️ Desktop</div>
+</div><div class="phone">
   <div class="notch"></div>
   <div class="screen" id="screen">
     <div class="stars-bg" id="starsBg"></div>
@@ -257,13 +355,67 @@ html,body{width:100%;height:100%;background:#111827;overflow:hidden;}
         <button class="btn-dismiss" onclick="dismissInstall()">Later</button>
       </div>
     </div>
-    <button class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵</button>
     <div class="content" id="content"></div>
   </div>
   <div class="home-bar"><div class="home-indicator"></div></div>
 </div></div>
 
 <script>
+
+// ═══ DEVICE DETECTION — runs first, before anything renders ═══
+(function(){
+  const ua = navigator.userAgent || '';
+  const w  = window.innerWidth;
+  const h  = window.innerHeight;
+  const touch = navigator.maxTouchPoints > 1 || 'ontouchstart' in window;
+
+  // Detect device type
+  const isMobileUA = /Android|iPhone|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(ua);
+  const isTabletUA  = /iPad|Tablet/i.test(ua) || (touch && /Android/i.test(ua) && !/Mobile/i.test(ua));
+  const isSmallScreen = w <= 480;
+  const isMediumScreen = w > 480 && w <= 900;
+
+  let deviceType;
+  if(isMobileUA || isSmallScreen) {
+    deviceType = 'mobile';
+  } else if(isTabletUA || (touch && isMediumScreen)) {
+    deviceType = 'tablet';
+  } else if(isMediumScreen) {
+    deviceType = 'tablet';
+  } else {
+    deviceType = 'desktop';
+  }
+
+  document.body.classList.add('device-' + deviceType);
+
+  // Update badge label
+  const badge = document.getElementById('deviceBadge');
+  if(badge){
+    const labels = {
+      mobile:  '📱 Mobile',
+      tablet:  '📲 Tablet',
+      desktop: '🖥️ Desktop'
+    };
+    badge.textContent = labels[deviceType] || '🖥️ Desktop';
+  }
+
+  // Re-detect on resize (e.g. rotating tablet)
+  window.addEventListener('resize', function(){
+    const nw = window.innerWidth;
+    let nd;
+    if(isMobileUA || nw <= 480) nd = 'mobile';
+    else if(isTabletUA || (touch && nw <= 900)) nd = 'tablet';
+    else if(nw <= 900) nd = 'tablet';
+    else nd = 'desktop';
+    if(nd !== deviceType){
+      document.body.classList.remove('device-mobile','device-tablet','device-desktop');
+      document.body.classList.add('device-' + nd);
+      if(badge){
+        badge.textContent = {mobile:'📱 Mobile',tablet:'📲 Tablet',desktop:'🖥️ Desktop'}[nd];
+      }
+    }
+  });
+})();
 
 // ═══ PWA SETUP — Service Worker + Manifest ═══
 (function() {
@@ -429,10 +581,11 @@ function sfxHint(){playTone(440,'sine',.15,.1);playTone(550,'sine',.1,.08,.1);}
 const MELODY=[[392,.4],[440,.2],[494,.2],[523,.4],[494,.2],[440,.4],[392,.4],[349,.2],[392,.2],[440,.6],[523,.4],[587,.2],[659,.2],[698,.4],[659,.2],[587,.4],[523,.4],[494,.2],[440,.2],[392,.8]];
 const BASS=[196,196,220,220,175,175,196,196,220,220,246,246,262,262,220,220];
 const CHORD_FREQS=[[261,329,392],[220,277,330],[196,247,294],[246,311,370]];
-function startMusic(){if(musicStarted)return;musicStarted=true;musicPlaying=true;document.getElementById('musicBtn').textContent='🎵';mloop();}
+function updateMusicBtn(){const btn=document.getElementById('musicBtn');if(btn)btn.textContent=musicPlaying?'🎵 Music':'🔇 Music';}
+function startMusic(){if(musicStarted)return;musicStarted=true;musicPlaying=true;updateMusicBtn();mloop();}
 function mloop(){if(!musicPlaying)return;try{const ac=getAC();if(!musicGain){musicGain=ac.createGain();musicGain.gain.value=.06;musicGain.connect(ac.destination);}const now=ac.currentTime,[mf,md]=MELODY[melIdx%MELODY.length];const mo=ac.createOscillator(),mg=ac.createGain();mo.connect(mg);mg.connect(musicGain);mo.type='triangle';mo.frequency.value=mf;mg.gain.setValueAtTime(.7,now);mg.gain.linearRampToValueAtTime(0,now+md);mo.start(now);mo.stop(now+md);melIdx++;if(melIdx%2===0){const bo=ac.createOscillator(),bg=ac.createGain();bo.connect(bg);bg.connect(musicGain);bo.type='sine';bo.frequency.value=BASS[bassIdx%BASS.length];bg.gain.setValueAtTime(.4,now);bg.gain.exponentialRampToValueAtTime(.001,now+.5);bo.start(now);bo.stop(now+.6);bassIdx++;}if(melIdx%8===0){CHORD_FREQS[chordIdx%CHORD_FREQS.length].forEach(cf=>{const co=ac.createOscillator(),cg=ac.createGain();co.connect(cg);cg.connect(musicGain);co.type='sine';co.frequency.value=cf;cg.gain.setValueAtTime(0,now);cg.gain.linearRampToValueAtTime(.15,now+.3);cg.gain.linearRampToValueAtTime(0,now+2);co.start(now);co.stop(now+2.1);});chordIdx++;}if(melIdx%4===0){[1047,1175,1319,1568].forEach((sf,si)=>{const so=ac.createOscillator(),sg=ac.createGain();so.connect(sg);sg.connect(musicGain);so.type='sine';so.frequency.value=sf;const sd=.05+si*.03;sg.gain.setValueAtTime(0,now+sd);sg.gain.linearRampToValueAtTime(.08,now+sd+.04);sg.gain.exponentialRampToValueAtTime(.001,now+sd+.15);so.start(now+sd);so.stop(now+sd+.2);});}musicInterval=setTimeout(mloop,md*1000);}catch(e){}}
 function stopMusic(){musicPlaying=false;clearTimeout(musicInterval);if(musicGain){try{musicGain.gain.linearRampToValueAtTime(0,getAC().currentTime+.3);}catch(e){}setTimeout(()=>{musicGain=null;musicStarted=false;},400);}}
-function toggleMusic(){sfxClick();if(musicPlaying){stopMusic();document.getElementById('musicBtn').textContent='🔇';}else{musicStarted=false;startMusic();document.getElementById('musicBtn').textContent='🎵';}}
+function toggleMusic(){sfxClick();if(musicPlaying){stopMusic();updateMusicBtn();}else{musicStarted=false;startMusic();}}
 
 // ═══ QUESTIONS ═══
 const QBANK={
@@ -565,7 +718,7 @@ function startDaily(){
   S.qi=0;S.phase='question';S.busy=false;S.roundCorrect=0;S.roundWrong=0;S.hintsLeft=1;S.hintUsed=false;
   render();
 }
-function renderStart(c){checkUnlocks();const dailyLabel=S.dailyDone?'✅ Daily Done — Score: '+S.dailyScore+'/8':'📅 Daily Challenge';const dailyClass=S.dailyDone?'locked-btn':'daily-btn';c.innerHTML=`<div class="title">✨ Magic Guild Trial ✨</div><div class="title-sub">Reading Comprehension Quest</div><div class="name-greet">Welcome back, ${S.playerName}! 🌟</div><div class="card"><div class="hud" style="justify-content:center;gap:10px;"><div class="hud-stat">${xpStat()} XP</div><div class="hud-stat">${hearts()}</div><div class="hud-stat">⭐ Lv.${S.level}</div></div><div class="action-row"><button class="action-row-btn" onclick="sfxClick();showProfile()">${S.avatar||'🧙'} Profile</button><button class="action-row-btn" onclick="sfxClick();showSettings()">⚙️ Settings</button></div><div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:14px;"><div style="color:#C8B6FF;font-size:12px;font-family:var(--game-body,'Nunito',sans-serif);">Best Streak:</div><div class="best-badge">🔥 ${S.bestStreak}</div></div><div style="color:#C8B6FF;text-align:center;font-size:12px;margin-bottom:10px;font-family:var(--game-body,'Nunito',sans-serif);">Choose your challenge:</div><button class="diff-btn ${dailyClass}" onclick="sfxClick();${S.dailyDone?'toast(\'Come back tomorrow for a new challenge!\',\'#f59e0b\')':'startDaily()'}"> ${dailyLabel}</button><button class="diff-btn btn-easy" onclick="sfxClick();startGame('easy')">🌱 Easy — Beginner Quests</button><button class="diff-btn btn-medium ${S.unlockedDiffs.medium?'':'locked-btn'}" onclick="${S.unlockedDiffs.medium?'sfxClick();startGame(\'medium\')':'sfxClick();toast(\'Reach '+S.xpForDiffs.medium+' XP to unlock!\',\'#f59e0b\')'}">🔮 Medium — Enchanted Riddles${!S.unlockedDiffs.medium?'<span class="lock-badge">🔒</span>':''}</button><button class="diff-btn btn-hard ${S.unlockedDiffs.hard?'':'locked-btn'}" onclick="${S.unlockedDiffs.hard?'sfxClick();startGame(\'hard\')':'sfxClick();toast(\'Reach '+S.xpForDiffs.hard+' XP to unlock!\',\'#f59e0b\')'}">🐉 Hard — Ancient Trials${!S.unlockedDiffs.hard?'<span class="lock-badge">🔒</span>':''}</button></div><div style="color:rgba(255,255,255,.2);text-align:center;font-size:10px;font-family:var(--game-body,'Nunito',sans-serif);">Medium unlocks at ${S.xpForDiffs.medium} XP · Hard unlocks at ${S.xpForDiffs.hard} XP</div>
+function renderStart(c){checkUnlocks();const dailyLabel=S.dailyDone?'✅ Daily Done — Score: '+S.dailyScore+'/8':'📅 Daily Challenge';const dailyClass=S.dailyDone?'locked-btn':'daily-btn';c.innerHTML=`<div class="title">✨ Magic Guild Trial ✨</div><div class="title-sub">Reading Comprehension Quest</div><div class="name-greet">Welcome back, ${S.playerName}! 🌟</div><div class="card"><div class="hud" style="justify-content:center;gap:10px;"><div class="hud-stat">${xpStat()} XP</div><div class="hud-stat">${hearts()}</div><div class="hud-stat">⭐ Lv.${S.level}</div></div><div class="action-row"><button class="action-row-btn" onclick="sfxClick();showProfile()">${S.avatar||'🧙'} Profile</button><button class="action-row-btn" onclick="sfxClick();showSettings()">⚙️ Settings</button><button class="action-row-btn" id="musicBtn" onclick="toggleMusic()">${musicPlaying?'🎵 Music':'🔇 Music'}</button></div><div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:14px;"><div style="color:#C8B6FF;font-size:12px;font-family:var(--game-body,'Nunito',sans-serif);">Best Streak:</div><div class="best-badge">🔥 ${S.bestStreak}</div></div><div style="color:#C8B6FF;text-align:center;font-size:12px;margin-bottom:10px;font-family:var(--game-body,'Nunito',sans-serif);">Choose your challenge:</div><button class="diff-btn ${dailyClass}" onclick="sfxClick();${S.dailyDone?'toast(\'Come back tomorrow for a new challenge!\',\'#f59e0b\')':'startDaily()'}"> ${dailyLabel}</button><button class="diff-btn btn-easy" onclick="sfxClick();startGame('easy')">🌱 Easy — Beginner Quests</button><button class="diff-btn btn-medium ${S.unlockedDiffs.medium?'':'locked-btn'}" onclick="${S.unlockedDiffs.medium?'sfxClick();startGame(\'medium\')':'sfxClick();toast(\'Reach '+S.xpForDiffs.medium+' XP to unlock!\',\'#f59e0b\')'}">🔮 Medium — Enchanted Riddles${!S.unlockedDiffs.medium?'<span class="lock-badge">🔒</span>':''}</button><button class="diff-btn btn-hard ${S.unlockedDiffs.hard?'':'locked-btn'}" onclick="${S.unlockedDiffs.hard?'sfxClick();startGame(\'hard\')':'sfxClick();toast(\'Reach '+S.xpForDiffs.hard+' XP to unlock!\',\'#f59e0b\')'}">🐉 Hard — Ancient Trials${!S.unlockedDiffs.hard?'<span class="lock-badge">🔒</span>':''}</button></div><div style="color:rgba(255,255,255,.2);text-align:center;font-size:10px;font-family:var(--game-body,'Nunito',sans-serif);">Medium unlocks at ${S.xpForDiffs.medium} XP · Hard unlocks at ${S.xpForDiffs.hard} XP</div>
     `;
   if(deferredPrompt){const ib=document.createElement('button');ib.textContent='Install as App';ib.style.cssText='width:100%;margin-top:12px;font-family:Fredoka One,cursive;font-size:15px;padding:12px;border:2px solid rgba(255,215,0,.4);border-radius:14px;background:rgba(255,215,0,.1);color:#FFD700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;';ib.onclick=function(){sfxClick();doInstall();};c.appendChild(ib);}
 }
